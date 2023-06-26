@@ -8,6 +8,8 @@ import csv
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import deque
+import webbrowser
+import urllib.parse
 
 def examine_cocktails(graph, ingredients):
     possible_cocktails = []
@@ -324,10 +326,16 @@ def v_recetas(coctel):
         next(csv_reader)  # Ignoramos la primera fila (cabecera)
         for row in csv_reader:
             if row[0] == coctel:  # Solo mostramos la receta para el coctel seleccionado
-                ttk.Label(root, text=row[0], font=("Helvetica", 16)).pack()  # Nombre del coctel
-                ttk.Label(root, text=row[1], font=("Helvetica", 12)).pack()  # Ingredientes
-                ttk.Label(root, text=row[2], font=("Helvetica", 12)).pack()  # Instrucciones
+                ttk.Label(root, text=row[0], font=("Helvetica", 16), wraplength=450).pack()  # Nombre del coctel
+                ttk.Label(root, text=row[1], font=("Helvetica", 12), wraplength=450).pack()  # Ingredientes
+                ttk.Label(root, text=row[2], font=("Helvetica", 12), wraplength=450).pack()  # Instrucciones
                 break
+
+    # Crear el enlace
+    coctel_encoded = urllib.parse.quote(coctel)
+    enlace = "https://mrbostondrinks.com/recipes/search?q=" + coctel_encoded
+    ttk.Button(root, text="Ver receta en línea", command=lambda: webbrowser.open(enlace)).pack()
+
     ttk.Button(root, text="Regresar", command=lambda: [root.destroy(), v_que_puedo_preparar()]).pack()
     ttk.Button(root, text='Volver al Menu', command=lambda: [root.destroy(), v_menu(ingredient_list,measurement_dict)]).pack()
 
@@ -342,6 +350,7 @@ def v_recetas(coctel):
     root.geometry(f"{ancho_ventana}x{alto_ventana}+{x}+{y}")
 
     root.mainloop()
+
 def graficotecnico(coctel):
     
     G = nx.DiGraph()
