@@ -15,47 +15,31 @@ def examine_cocktails(graph, ingredients):
     possible_cocktails = []
     min_cantidad = float('inf')
     min_coctel = None
-
     for vertex in graph.keys():
         cocktail_ingredients = graph[vertex]
         if all(ingredient in ingredients and ingredients[ingredient][0] >= quantity for ingredient, quantity in cocktail_ingredients.items()):
             possible_cocktails.append(vertex)
         else:
-            
             falta = sum(max(0, quantity - ingredients.get(ingredient, (0,))[0]) for ingredient, quantity in cocktail_ingredients.items())
-            
             falta += sum(1 for ingredient in cocktail_ingredients if ingredient not in ingredients) * 1000
             if falta < min_cantidad:
                 min_cantidad = falta
                 min_coctel = vertex
-
     min_cantidad //= 1000
-
     return possible_cocktails, min_coctel, min_cantidad
 
-
 def bfs(graph, cocktails):
-    
     cola = deque(cocktails)
-    
     min_cantidad = float('inf')
     min_coctel = None
-
     while cola:
-        
         coctel = cola.popleft()
-        
         if coctel in graph:
-            
             cantidad = sum(graph[coctel].values()) + len(graph[coctel]) * 1000
-           
             if cantidad < min_cantidad:
                 min_cantidad = cantidad
                 min_coctel = coctel
-
-  
     min_cantidad //= 1000
-
     return min_coctel, min_cantidad
 class AutocompleteEntry(ttk.Entry):
     def __init__(self, autocomplete_list, *args, **kwargs):
@@ -263,9 +247,9 @@ def v_que_puedo_preparar():
             selected_cocktail = cocktails[selected_index[0]]  
             graficotecnico(selected_cocktail)  
 
-    ttk.Button(root, text='Ver Receta', command=lambda: [root.destroy(),ver_receta]).pack()  # Agrega el botón "Ver Receta"
-    ttk.Button(root, text='Mostrar Gráfico Técnico', command=mostrar_grafico).pack()  # Agrega el botón "Mostrar Gráfico Técnico"
-    ttk.Button(root, text='Coctel más eficiente', command=lambda: [root.destroy(), v_eficiente(cocktails,min_coctel, min_cantidad)]).pack()  # Agrega el botón "Coctel más eficiente"
+    ttk.Button(root, text='Ver Receta', command=lambda: [root.destroy(),ver_receta]).pack()  
+    ttk.Button(root, text='Mostrar Gráfico Técnico', command=mostrar_grafico).pack()  
+    ttk.Button(root, text='Coctel más eficiente', command=lambda: [root.destroy(), v_eficiente(cocktails,min_coctel, min_cantidad)]).pack()  
     ttk.Button(root, text='Volver al Menu', command=lambda: [root.destroy(), v_menu(ingredient_list,measurement_dict)]).pack()
 
     # Centrar la ventana en la pantalla
